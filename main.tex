@@ -1,0 +1,77 @@
+\documentclass[a5paper]{scrartcl}
+
+\usepackage[rotate=0,blackness=70]{pentpack}
+
+
+\title{Pentpack - Draw Basic Pentagame Moves}
+
+\author{Jan `Penta' Suchanek}
+
+\begin{document}
+
+\maketitle
+\begin{center}
+        
+    \begin{pentdiag}{0.618\paperwidth}
+        \foreach \s in {0,...,4}
+        {
+            \block{\s}{};
+            \linie{\s}{\s a}{->};
+            %\bogen{\s}{<->};
+        }
+    \end{pentdiag}
+
+\end{center}
+\begin{figure}
+    \centering
+
+    \begin{pentdiag}{6cm}
+        \block{0}{black};
+        \block{2}{WildStrawberry};
+        \block{3}{Goldenrod};
+        \linie{1}{3a}{->};
+        \linie{0a}{1a}{color=red};
+        \linie{2a}{1a}{color=red,<-};
+        \block{0a}{Goldenrod};
+        \bogen{1}{};
+        \cjunct{0};
+        \cjunct{1};
+        \bogen{3}{<->};
+        \ccornr{2};
+        \ccornl{2};
+        \cbog{1};
+        \cbog{3};
+    \end{pentdiag}
+
+    \caption{Not so easy}
+    \label{fig:mydiag}
+\end{figure}
+The package can be loaded with the option \verb|sw| to have a black-and-white board. However, you can still add colour in your commands.
+
+Use the environment \verb|\begin{pentdiag}{circlediameter}| which will draw you a Pentagame board. Note that the parameter changes the circle, not the circumference which is slightly larger.
+
+Nodes are labelled 0 to 5 with 0=5 white. For lines, use
+
+\verb|\linie{from}{to}{options}| 
+
+where options can be of type \verb|->| or \verb|color=red| etc. passed to TikZ. 
+
+Use 
+
+\verb|\bogen{number}{options}| 
+
+to draw one of the arcs, where arc number 1 is left of node number 1 etc. 
+
+Blocks cannot be placed (yet) onto individual stops, but only on lines to be blocked. There are these commands:
+
+\verb|\block{node}{options}| puts a block (or piece, if you colour it) onto a node. 
+
+\verb|\ccornr{node}{options}| and \verb|\ccornl{node}{options}| closes the long line from a node on stop three to the right or left, respectively.
+
+\verb|\cbog{number}| closes an arc; and 
+
+\verb|\cjunct{number}| closes the short line opposite of node \verb|number|.
+
+ToDo: more precise calculations, the \verb|calc| package sucks.
+
+\end{document}

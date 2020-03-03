@@ -1,0 +1,182 @@
+\NeedsTeXFormat{LaTeX2e} 
+\ProvidesPackage{pentpack}[2020/03/03 Package to draw Pentagame diagrams]
+
+\RequirePackage[dvipsnames]{xcolor}
+\RequirePackage{xkeyval}
+\RequirePackage{environ}
+\RequirePackage{tikz}
+\RequirePackage{ifthen}
+\RequirePackage{xfp}
+\usetikzlibrary{positioning}
+\usetikzlibrary{arrows}
+
+\newcommand{\myred}{gray!10}
+\newcommand{\myblue}{gray!15}
+\newcommand{\mywhite}{gray!11}
+\newcommand{\myyellow}{gray!38}
+\newcommand{\mygreen}{gray!50}
+\newcommand{\blackness}{black!55}
+\newcommand{\rota}{}
+\newlength{\ringwidth}
+
+\newlength{\pfeildicke}
+\setlength{\pfeildicke}{2pt}
+
+\DeclareOptionX{rotate}{
+    \renewcommand{\rota}{#1}
+}
+
+\DeclareOptionX{blackness}{
+    \renewcommand{\blackness}{black!#1}
+}
+
+\DeclareOptionX{linewidth}{
+    \setlength{\pfeildicke}{#1}
+}
+
+ 
+
+\DeclareOption{sw}{
+    \renewcommand{\myred}{gray!10}
+    \renewcommand{\myblue}{gray!15}
+    \renewcommand{\mywhite}{gray!11}
+    \renewcommand{\myyellow}{gray!38}
+    \renewcommand{\mygreen}{gray!50}
+}
+
+\DeclareOption{bunt}{
+    \renewcommand{\myred}{WildStrawberry}
+    \renewcommand{\myblue}{Cerulean}
+    \renewcommand{\mywhite}{white}
+    \renewcommand{\myyellow}{Goldenrod}
+    \renewcommand{\mygreen}{SpringGreen}
+}
+
+
+\ExecuteOptionsX{rotate=90,blackness=66}\relax
+\ExecuteOptions{bunt}\relax
+\ProcessOptionsX\relax
+
+%%%%%%%%%% COMMANDS
+
+\newlength{\svar}    %stop
+\newlength{\jvar}   % junction
+\newlength{\cvar}   % corner
+\newlength{\kvar}   % circle (kreis) ! NICHT Umkreis
+\newlength{\fvar}   % figure
+\newlength{\ringvar} % dicke verbindungsring
+
+
+
+%\def\rota{90}
+\def\meinpfeil{triangle 45}
+
+
+%% Commands for drawing lines and corner blocks
+
+\newcommand{\linie}[3]{
+    \draw[#3,line width=\pfeildicke,>=\meinpfeil,cap=round] (#1.center) -- (#2.center)
+}
+
+\newcommand{\bogen}[2]{
+    \draw[#2,>=\meinpfeil,line width=\pfeildicke,cap=round] ({72*(#1-1)+\rota}:\kvar)  arc ({72*(#1-1)+\rota}:{72*(#1)+\rota}:\kvar)
+}
+
+\newcommand{\block}[2]{
+    \filldraw[draw=black,fill=#2] (#1) circle (\fvar);
+}
+
+%%% PICS
+
+\tikzset{
+    small/.style={line width=0.1pt,draw=black,fill=gray!15}
+}
+
+\tikzset{
+    corn/.pic={    
+    \filldraw[draw=black, fill, line width=0.1pt] (0,0) circle (\cvar);
+    \foreach \s in {1,...,6} {
+        \filldraw[small] ({-162+\rota}:{\cvar+\s*2*\svar-\svar}) circle (\svar);
+        }
+    \foreach \s in {1,...,6} {
+        \filldraw[small] ({-198+\rota}:{\cvar+\s*2*\svar-\svar}) circle (\svar);
+        }
+    }
+}
+
+\tikzset{
+    ccorn/.pic={    
+        \filldraw[small,fill=black] (-162+\rota:\cvar+3*2*\svar-\svar) circle (\fvar);
+    }
+}
+
+
+\tikzset{
+    junc/.pic={    
+    \filldraw[draw=black, fill, line width=0.1pt] (0,0) circle (\jvar);
+    \foreach \s in {1,...,3} {
+        \filldraw[small] ({-54+\rota}:{\jvar+\s*2*\svar-\svar}) circle (\svar);
+        }
+    }
+}
+
+\tikzset{
+    cjunc/.pic={    
+    \filldraw[small,fill=black] (\rota:\fpeval{\kvar/3.2}) circle (\fvar);
+    }
+}
+
+%%% COMMANDS
+
+\newcommand{\cjunct}[1]{
+     \filldraw[fill=black] ({#1*72+\rota}:{\kvar/3.24}) circle (\fvar);
+}
+
+\newcommand{\ccornl}[1]{
+     \draw ({#1*72+\rota}:\kvar) pic[rotate={#1*72}] {ccorn};
+}
+
+\newcommand{\ccornr}[1]{
+     \draw ({#1*72+\rota}:\kvar) pic[rotate={#1*72-36}] {ccorn};
+}
+
+\newcommand{\cbog}[1]{
+    \filldraw[fill=black] ({#1*72+36+\rota}:\kvar) circle (\fvar);
+}
+
+
+
+\newcommand{\nodes}[1]{
+    \ifthenelse{#1=0}{\def\mycolor{\mywhite}}{}
+    \ifthenelse{#1=1}{\def\mycolor{\mygreen}}{}
+    \ifthenelse{#1=2}{\def\mycolor{\myyellow}}{}
+    \ifthenelse{#1=3}{\def\mycolor{\myred}}{}
+    \ifthenelse{#1=4}{\def\mycolor{\myblue}}{}
+    \ifthenelse{#1=5}{\def\mycolor{\mywhite}}{}
+    \node (#1) at ({\rota+72*#1}:\kvar){};   
+    \draw ({\rota+72*#1}:\kvar) pic[color=\mycolor,rotate={72*#1}] {corn}; 
+    \node (#1a) at ({\rota+72*#1}:{-\kvar/2.618}) {};
+    \draw ({\rota+72*#1}:{-\kvar/2.618}) pic[color=\mycolor,rotate={72*#1}] {junc};
+} 
+
+\tikzset{
+    myboard/.pic={
+        \fill[color=\blackness] (0,0) circle (\kvar+\cvar) ;
+        \draw[line width=\ringwidth,color=gray!15] (0,0) circle (\kvar) ;
+        \foreach \s in {0,...,5} { 
+            \foreach \t in {0,...,2} {
+                \filldraw[small] ({\t*18+18+\rota+\s*72}:\kvar) circle (\svar);
+            }
+        }
+        \foreach \s in {0,...,5} {% draws 6/5 nodes where 0=5 white
+            \nodes{\s};
+        }
+    }
+}
+
+\NewEnviron{pentdiag}[1]{\setlength{\kvar}{\fpeval{#1/2}pt}\setlength{\svar}{\fpeval{\kvar/22.38133}pt}\setlength{\jvar}{\fpeval{2.02606*\svar}pt}\setlength{\cvar}{\fpeval{2.23606*\svar}pt}\setlength{\fvar}{\fpeval{0.75*\svar}pt}\setlength{\ringwidth}{\fpeval{0.4*\svar}pt}
+    \begin{tikzpicture}
+        \pic{myboard};
+        \BODY%
+    \end{tikzpicture}%
+}

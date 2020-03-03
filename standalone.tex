@@ -1,0 +1,16 @@
+\documentclass{standalone}
+
+\usepackage[rotate=0,linewidth=5pt,blackness=66]{pentpack}
+
+\begin{document}
+    \begin{pentdiag}{12cm}%
+        \foreach \s in {0,...,4}
+        {
+            \block{\s}{};
+            \linie{\s}{\s a}{->};
+            \linie{\s}{\fpeval{\s+1}}{-};
+            \cbog{\s};
+        }
+    \end{pentdiag}
+
+\end{document}
