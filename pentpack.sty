@@ -16,6 +16,7 @@
 \newcommand{\myyellow}{gray!38}
 \newcommand{\mygreen}{gray!50}
 \newcommand{\blackness}{black!55}
+\newcommand{\linecolor}{black}
 \newcommand{\rota}{}
 \newlength{\ringwidth}
 
@@ -30,11 +31,18 @@
     \renewcommand{\blackness}{black!#1}
 }
 
+\DeclareOptionX{linecolor}{
+    \renewcommand{\blackness}{#1}
+}
+
 \DeclareOptionX{linewidth}{
     \setlength{\pfeildicke}{#1}
 }
 
- 
+\DeclareOptionX{linecolor}{
+    \renewcommand{\linecolor}{#1}
+}
+
 
 \DeclareOption{sw}{
     \renewcommand{\myred}{gray!10}
@@ -53,7 +61,7 @@
 }
 
 
-\ExecuteOptionsX{rotate=90,blackness=66}\relax
+\ExecuteOptionsX{rotate=90,blackness=66,linecolor=black}\relax
 \ExecuteOptions{bunt}\relax
 \ProcessOptionsX\relax
 
@@ -145,6 +153,8 @@
 }
 
 
+%%% Drawing the stops
+
 
 \newcommand{\nodes}[1]{
     \ifthenelse{#1=0}{\def\mycolor{\mywhite}}{}
@@ -158,6 +168,8 @@
     \node (#1a) at ({\rota+72*#1}:{-\kvar/2.618}) {};
     \draw ({\rota+72*#1}:{-\kvar/2.618}) pic[color=\mycolor,rotate={72*#1}] {junc};
 } 
+
+% Drawing the board
 
 \tikzset{
     myboard/.pic={
@@ -174,9 +186,10 @@
     }
 }
 
-\NewEnviron{pentdiag}[1]{\setlength{\kvar}{\fpeval{#1/2}pt}\setlength{\svar}{\fpeval{\kvar/22.38133}pt}\setlength{\jvar}{\fpeval{2.02606*\svar}pt}\setlength{\cvar}{\fpeval{2.23606*\svar}pt}\setlength{\fvar}{\fpeval{0.75*\svar}pt}\setlength{\ringwidth}{\fpeval{0.4*\svar}pt}
-    \begin{tikzpicture}
+\NewEnviron{pentdiag}[1]{\setlength{\kvar}{\fpeval{#1/2}pt}\setlength{\svar}{\fpeval{\kvar/22.38133}pt}\setlength{\jvar}{\fpeval{2.02606*\svar}pt}\setlength{\cvar}{\fpeval{2.23606*\svar}pt}\setlength{\fvar}{\fpeval{0.75*\svar}pt}\setlength{\ringwidth}{\fpeval{0.4*\svar}pt}\relax
+    \begin{tikzpicture}[draw=\linecolor]
         \pic{myboard};
         \BODY%
     \end{tikzpicture}%
 }
+%

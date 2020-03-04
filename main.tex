@@ -1,6 +1,6 @@
 \documentclass[a5paper]{scrartcl}
 
-\usepackage[rotate=0,blackness=70]{pentpack}
+\usepackage[linecolor=gray,rotate=90,blackness=99,linewidth=4pt]{pentpack}
 
 
 \title{Pentpack - Draw Basic Pentagame Moves}
@@ -46,7 +46,7 @@
     \caption{Not so easy}
     \label{fig:mydiag}
 \end{figure}
-The package can be loaded with the option \verb|sw| to have a black-and-white board. However, you can still add colour in your commands.
+The package can be loaded with the option \verb|sw| to have a black-and-white board. The option \verb|rotate=0| rotates the board with \verb|rotate=90| as default. The arrows and line thickness is globally controlled by \verb|linewidth| and default line color is \verb|linecolor=black|. The board shade is manipulated by  \verb|blackness| which can take a value between 0 and 100.
 
 Use the environment \verb|\begin{pentdiag}{circlediameter}| which will draw you a Pentagame board. Note that the parameter changes the circle, not the circumference which is slightly larger.
 
@@ -66,12 +66,14 @@ Blocks cannot be placed (yet) onto individual stops, but only on lines to be blo
 
 \verb|\block{node}{options}| puts a block (or piece, if you colour it) onto a node. 
 
-\verb|\ccornr{node}{options}| and \verb|\ccornl{node}{options}| closes the long line from a node on stop three to the right or left, respectively.
+\verb|\ccornr{node}{options}| and
+
+\verb|\ccornl{node}{options}| closes the long line from a node on stop three to the right or left, respectively.
 
 \verb|\cbog{number}| closes an arc; and 
 
 \verb|\cjunct{number}| closes the short line opposite of node \verb|number|.
 
-ToDo: more precise calculations, the \verb|calc| package sucks.
+ToDo: label the small stops, so that they can be addressed individually. Find a solution for addressing the stops on the short lines properly.
 
 \end{document}
