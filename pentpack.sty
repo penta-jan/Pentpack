@@ -9,6 +9,7 @@
 \RequirePackage{xfp}
 \usetikzlibrary{positioning}
 \usetikzlibrary{arrows}
+\usetikzlibrary{shapes.geometric}
 
 \newcommand{\myred}{gray!10}
 \newcommand{\myblue}{gray!15}
@@ -139,6 +140,14 @@
     }
 }
 
+\tikzset{
+    triangle/.style = {inner sep=0.5\fvar, regular polygon, regular polygon sides=3 }
+}
+
+\tikzset{
+    square/.style = {inner sep=0.7\fvar,regular polygon, regular polygon sides=4 }
+}
+ 
 %%% COMMANDS
 
 \newcommand{\cjunct}[1]{
