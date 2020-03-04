@@ -1,9 +1,10 @@
 \documentclass[a5paper]{scrartcl}
 
-\usepackage[linecolor=gray,rotate=90,blackness=99,linewidth=4pt]{pentpack}
+\usepackage[blackness=10]{pentpack}
 
 
-\title{Pentpack - Draw Basic Pentagame Moves}
+\title{Pentpack.sty}
+\subtitle{A package to draw Pentagame board and moves}
 
 \author{Jan `Penta' Suchanek}
 
@@ -12,12 +13,13 @@
 \maketitle
 \begin{center}
         
-    \begin{pentdiag}{0.618\paperwidth}
+    \begin{pentdiag}{0.4\linewidth}
         \foreach \s in {0,...,4}
         {
             \block{\s}{};
             \linie{\s}{\s a}{->};
-            %\bogen{\s}{<->};
+            \linie{\s}{\fpeval{\s+1}}{-};
+            \cbog{\s};
         }
     \end{pentdiag}
 
@@ -30,7 +32,7 @@
         \block{2}{WildStrawberry};
         \block{3}{Goldenrod};
         \linie{1}{3a}{->};
-        \linie{0a}{1a}{color=red};
+        \linie{2-3}{1a}{color=red};
         \linie{2a}{1a}{color=red,<-};
         \block{0a}{Goldenrod};
         \bogen{1}{};
@@ -38,42 +40,77 @@
         \cjunct{1};
         \bogen{3}{<->};
         \ccornr{2};
-        \ccornl{2};
-        \cbog{1};
-        \cbog{3};
+        \ccornl{0};
+        \cbog{5};
+        \block{3+2}{red};
+        \block{2-3}{red};
+        \block{2a1}{red};
+        \block{2r2}{red};
     \end{pentdiag}
 
     \caption{Not so easy}
     \label{fig:mydiag}
 \end{figure}
-The package can be loaded with the option \verb|sw| to have a black-and-white board. The option \verb|rotate=0| rotates the board with \verb|rotate=90| as default. The arrows and line thickness is globally controlled by \verb|linewidth| and default line color is \verb|linecolor=black|. The board shade is manipulated by  \verb|blackness| which can take a value between 0 and 100.
 
-Use the environment \verb|\begin{pentdiag}{circlediameter}| which will draw you a Pentagame board. Note that the parameter changes the circle, not the circumference which is slightly larger.
+\subsection*{Loading the package}
 
-Nodes are labelled 0 to 5 with 0=5 white. For lines, use
+This is a package to draw Pentagame boards. The design of the board can, to some extent, be manipulated upon loading the package; later, only the size of the individual board can be changed. 
 
-\verb|\linie{from}{to}{options}| 
+    \verb|sw|  have a black-and-white board
+    
+    \verb|rotate=0| rotates the board with \verb|rotate=90| set as default
+    
+    \verb|linecolor=color| set the default color for all lines that are drawn; the default is black. 
+    
+    \verb|blackness=90| sets the shade of the board background, the default is 66.
 
-where options can be of type \verb|->| or \verb|color=red| etc. passed to TikZ. 
+\subsection*{Environment pentdiag}
 
-Use 
+\verb|\begin{pentdiag}{circlediameter}| etc. will draw you a Pentagame board in the size specified. Note that the parameter defines the circle, not the circumference, which is slightly larger; so setting it to \verb|\linewidth| will result in an overfull \verb|hbox|.
 
-\verb|\bogen{number}{options}| 
+\subsection*{Nodes}
 
-to draw one of the arcs, where arc number 1 is left of node number 1 etc. 
+The corners are labelled counter-clockwise \verb|0| to \verb|5|, where both \verb|0| and \verb|5| is the white corner. This holds throughout. 
 
-Blocks cannot be placed (yet) onto individual stops, but only on lines to be blocked. There are these commands:
+The junctions are labelled \verb|0a| to \verb|5a| respectively.
 
-\verb|\block{node}{options}| puts a block (or piece, if you colour it) onto a node. 
+The environment creates a TikZ picture, so you can use all TikZ commands here. 
 
-\verb|\ccornr{node}{options}| and
+\subsection*{Lines}
 
-\verb|\ccornl{node}{options}| closes the long line from a node on stop three to the right or left, respectively.
+\verb|\linie{from}{to}{options}| draws a line between two nodes or coordinates (the centre of the board is \verb|0,0|). Options can be of type \verb|->| or \verb|color=red| etc. can be passed to TikZ to make these arrows, coloured, dashed etc. 
 
-\verb|\cbog{number}| closes an arc; and 
+\noindent\verb|\bogen{number}{options}| draws one of the arcs, where arc number \verb|1| is left of node number \verb|1| etc.; again, options can be passed. 
 
-\verb|\cjunct{number}| closes the short line opposite of node \verb|number|.
+\subsection*{Stops}
 
-ToDo: label the small stops, so that they can be addressed individually. Find a solution for addressing the stops on the short lines properly.
+The stops on the lines are labelled as follows:
 
+    \verb|0r1| is the first stop on the ring from node \verb|0|, counter-clockwise.
+    
+    \verb|0+1| is the first stop on the long line from node \verb|0|, clockwise.
+    
+    \verb|0-1| is the first stop on the long line from node \verb|0|, counter-clockwise.
+    
+    \verb|0a1| is the first stop on the short line from node \verb|0a|, counter-clockwise.
+
+\subsection*{Blocks}
+
+\verb|\block{node}{color}| places a filled circle of size \verb|\svar| onto the stop or node specified. Default colour is \verb|black|.
+
+Since you sometimes just want to block a line without bothering too much about the exact placement of the block, there are four `shortcut' commands:
+
+\verb|\cbog{number}| blocks arc \verb|number|.
+
+\verb|\ccornl{number}| blocks long line left from node  \verb|number|.
+
+\verb|\ccornr{number}| blocks long line right from node  \verb|number|.
+|
+
+\verb|\cjunct{}| blocks short line \emph{opposite} node  \verb|number|.
+
+\section*{Agenda}
+\begin{itemize}
+    \item migrate to \verb|arrows.meta| and have arrow tips scale, too!
+\end{itemize}
 \end{document}

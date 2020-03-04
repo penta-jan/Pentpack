@@ -1,16 +1,21 @@
 \documentclass{standalone}
 
-\usepackage[rotate=90,linewidth=5pt,blackness=66]{pentpack}
+\usepackage[rotate=90,blackness=20]{pentpack}
 
 \begin{document}
-    \begin{pentdiag}{12cm}%
+    \begin{pentdiag}{5cm}%
         \foreach \s in {0,...,4}
         {
-            \block{\s}{};
-            \linie{\s}{\s a}{->};
-            \linie{\s}{\fpeval{\s+1}}{-};
-            \cbog{\s};
+         %   \block{\s}{};
+%            \linie{\s}{\s a}{->};
+%            \linie{\s}{\fpeval{\s+1}}{-};
+        %    \cbog{\s};
         }
+        \block{4r2}{};
+        \block{1-3}{};
+        \block{1+4}{};
+        \block{1a1}{};
+        \draw (1a1) circle (3\svar);
     \end{pentdiag}
 
 \end{document}

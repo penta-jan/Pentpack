@@ -20,6 +20,8 @@
 \newcommand{\rota}{}
 \newlength{\ringwidth}
 
+\newcommand{\nona}{}  % node name to be passed 
+
 \newlength{\pfeildicke}
 \setlength{\pfeildicke}{2pt}
 
@@ -97,17 +99,19 @@
 %%% PICS
 
 \tikzset{
-    small/.style={line width=0.1pt,draw=black,fill=gray!15}
+    small/.style={line width=0.3pt,draw=black,fill=gray!15}
 }
 
 \tikzset{
     corn/.pic={    
-    \filldraw[draw=black, fill, line width=0.1pt] (0,0) circle (\cvar);
-    \foreach \s in {1,...,6} {
-        \filldraw[small] ({-162+\rota}:{\cvar+\s*2*\svar-\svar}) circle (\svar);
+    \filldraw[draw=black, fill, line width=0.3pt] (0,0) circle (\cvar);
+    \foreach \q in {1,...,6} {
+        \filldraw[small] ({-162+\rota}:{\cvar+\q*2*\svar-\svar}) circle (\svar);
+        \node (\s+\q) at ({-162+\rota}:{\cvar+\q*2*\svar-\svar}) {};        
         }
-    \foreach \s in {1,...,6} {
-        \filldraw[small] ({-198+\rota}:{\cvar+\s*2*\svar-\svar}) circle (\svar);
+    \foreach \q in {1,...,6} {
+        \filldraw[small] ({-198+\rota}:{\cvar+\q*2*\svar-\svar}) circle (\svar);
+        \node (\s-\q) at ({-198+\rota}:{\cvar+\q*2*\svar-\svar}) {};
         }
     }
 }
@@ -121,9 +125,10 @@
 
 \tikzset{
     junc/.pic={    
-    \filldraw[draw=black, fill, line width=0.1pt] (0,0) circle (\jvar);
-    \foreach \s in {1,...,3} {
-        \filldraw[small] ({-54+\rota}:{\jvar+\s*2*\svar-\svar}) circle (\svar);
+    \filldraw[draw=black, fill, line width=0.3pt] (0,0) circle (\jvar);
+    \foreach \q in {1,...,3} {
+        \filldraw[small] ({-54+\rota}:{\jvar+\q*2*\svar-\svar}) circle (\svar);
+        \node (\s a\q) at ({-54+\rota}:{\jvar+\q*2*\svar-\svar}) {};
         }
     }
 }
@@ -163,6 +168,7 @@
     \ifthenelse{#1=3}{\def\mycolor{\myred}}{}
     \ifthenelse{#1=4}{\def\mycolor{\myblue}}{}
     \ifthenelse{#1=5}{\def\mycolor{\mywhite}}{}
+    \renewcommand{\nona}{#1}
     \node (#1) at ({\rota+72*#1}:\kvar){};   
     \draw ({\rota+72*#1}:\kvar) pic[color=\mycolor,rotate={72*#1}] {corn}; 
     \node (#1a) at ({\rota+72*#1}:{-\kvar/2.618}) {};
@@ -175,9 +181,12 @@
     myboard/.pic={
         \fill[color=\blackness] (0,0) circle (\kvar+\cvar) ;
         \draw[line width=\ringwidth,color=gray!15] (0,0) circle (\kvar) ;
+        \draw[line width=0.3pt,color=black] (0,0) circle (\kvar+0.5\ringwidth) ;
+        \draw[line width=0.3pt,color=black] (0,0) circle (\kvar-0.5\ringwidth) ;
         \foreach \s in {0,...,5} { 
-            \foreach \t in {0,...,2} {
-                \filldraw[small] ({\t*18+18+\rota+\s*72}:\kvar) circle (\svar);
+            \foreach \t in {1,...,3} {
+                \node (\s r\t) at ({\t*18+\rota+\s*72}:\kvar) {};
+                \filldraw[small] ({\t*18+\rota+\s*72}:\kvar) circle (\svar);
             }
         }
         \foreach \s in {0,...,5} {% draws 6/5 nodes where 0=5 white
@@ -186,10 +195,11 @@
     }
 }
 
-\NewEnviron{pentdiag}[1]{\setlength{\kvar}{\fpeval{#1/2}pt}\setlength{\svar}{\fpeval{\kvar/22.38133}pt}\setlength{\jvar}{\fpeval{2.02606*\svar}pt}\setlength{\cvar}{\fpeval{2.23606*\svar}pt}\setlength{\fvar}{\fpeval{0.75*\svar}pt}\setlength{\ringwidth}{\fpeval{0.4*\svar}pt}\relax
+\NewEnviron{pentdiag}[1]{\setlength{\kvar}{\fpeval{#1/2}pt}\setlength{\svar}{\fpeval{\kvar/22.38133}pt}\setlength{\jvar}{\fpeval{2.02606*\svar}pt}\setlength{\cvar}{\fpeval{2.23606*\svar}pt}\setlength{\fvar}{\fpeval{0.75*\svar}pt}\setlength{\ringwidth}{\fpeval{0.4*\svar}pt}\setlength{\pfeildicke}{\fpeval{0.8*\svar}pt}\relax
     \begin{tikzpicture}[draw=\linecolor]
         \pic{myboard};
         \BODY%
     \end{tikzpicture}%
 }
-%
+
+\endinput
