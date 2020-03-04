@@ -1,7 +1,11 @@
 \documentclass[a5paper]{scrartcl}
 
-\usepackage[blackness=10]{pentpack}
+\usepackage{pentpack}
 
+\usepackage{standalone}
+
+\setlength{\parskip}{1ex}
+\setlength{\parindent}{0pt}
 
 \title{Pentpack.sty}
 \subtitle{A package to draw Pentagame board and moves}
@@ -29,12 +33,12 @@
 
     \begin{pentdiag}{6cm}
         \block{0}{black};
-        \block{2}{WildStrawberry};
-        \block{3}{Goldenrod};
+        \block{2}{\myred};
+        \block{3}{\myyellow};
         \linie{1}{3a}{->};
-        \linie{2-3}{1a}{color=red};
+        \linie{2-3}{1a}{color=red} node[midway,above] {1};
         \linie{2a}{1a}{color=red,<-};
-        \block{0a}{Goldenrod};
+        \block{4r1}{Goldenrod};
         \bogen{1}{};
         \cjunct{0};
         \cjunct{1};
@@ -42,10 +46,10 @@
         \ccornr{2};
         \ccornl{0};
         \cbog{5};
-        \block{3+2}{red};
-        \block{2-3}{red};
-        \block{2a1}{red};
-        \block{2r2}{red};
+        \block{3+2}{\myred};
+        \block{2-3}{\myblue};
+        \block{2a1}{\mygreen};
+        \block{2r2}{\myyellow};
     \end{pentdiag}
 
     \caption{Not so easy}
@@ -54,15 +58,26 @@
 
 \subsection*{Loading the package}
 
-This is a package to draw Pentagame boards. The design of the board can, to some extent, be manipulated upon loading the package; later, only the size of the individual board can be changed. 
+This is a package to draw Pentagame boards using TikZ. The design of the board can, to some extent, be manipulated upon loading the package; later, only the size of the individual board can be changed. 
 
-    \verb|sw|  have a black-and-white board
+\verb|sw|  have a black-and-white board
     
-    \verb|rotate=0| rotates the board with \verb|rotate=90| set as default; \verb|rotate=0| sets white to the right.
+\verb|rotate=0| rotates the board with \verb|rotate=90| set as default; \verb|rotate=0| sets white to the right.
     
-    \verb|linecolor=color| set the default color for all lines that are drawn; the default is black. 
+\verb|linecolor=color| set the default color for all lines that are drawn; the default is black. 
     
-    \verb|blackness=90| sets the shade of the board background, the default is 66.
+\verb|blackness=90| sets the shade of the board background, the default is 40.
+
+Because it's TikZ, you can now draw all sort of things on it, ideally relative to the nodes, which are labeled as listed below.
+
+\subsection*{Colours}
+
+Colours are named \verb|\mywhite|, \verb|\mygreen|, \verb|\myyellow|, \verb|\myred| and \verb|\myblue|. In colour mode, these are \verb|dvipsnames|: white, SpringGreen, Goldenrod, WildStrawberry and Cerulean. These commands are set as options to TikZ as in \verb|[color=\mywhite]|. You can define your own by redefining these commands:
+
+\verb|\renewcommand{\mywhite}{color}|
+
+Ideally this would be done in your preamble.
+
 
 \subsection*{Environment pentdiag}
 
@@ -70,29 +85,41 @@ This is a package to draw Pentagame boards. The design of the board can, to some
 
 \subsection*{Nodes}
 
-The corners are labelled counter-clockwise \verb|0| to \verb|5|, where both \verb|0| and \verb|5| is the white corner. This holds throughout. 
+The corners are labelled counter-clockwise \verb|0| to \verb|5|, where both \verb|0| and \verb|5| is the white corner.  
 
-The junctions are labelled \verb|0a| to \verb|5a| respectively.
+The junctions are labelled \verb|0a| to \verb|5a| respectively, also counter-clockwise.
 
-The environment creates a TikZ picture, so you can use all TikZ commands here. 
+The environment creates a TikZ picture, so you can use all TikZ commands here. All new commands defined by the package lack the closing \verb|;| so they can be complemented and need to be closed by a semicolon. 
+
+The radius of the corners is of length \verb|\cvar| and the radius of the junctions \verb|\jvar|
 
 \subsection*{Lines}
 
-\verb|\linie{from}{to}{options}| draws a line between two nodes or coordinates (the centre of the board is \verb|0,0|). Options can be of type \verb|->| or \verb|color=red| etc. can be passed to TikZ to make these arrows, coloured, dashed etc. 
+\verb|\linie{from}{to}{options}| draws a line between two nodes or coordinates (the centre of the board is \verb|0,0|). Options can be of type \verb|->| or \verb|color=red| etc. can be passed to TikZ to make these arrows, coloured, dashed etc. They can be complemented for labeling, e.g.
 
-\noindent\verb|\bogen{number}{options}| draws one of the arcs, where arc number \verb|1| is left of node number \verb|1| etc.; again, options can be passed. 
+\verb|\linie{1}{3a}{->} node[midway,right] {1};|
+
+---draws the number 1 next to the line.
+
+\verb|\bogen{number}{options}| draws one of the arcs, where arc number \verb|0| is left of node number \verb|0| etc.; again, options for colour and arrows can be passed. 
+
+If you need an arc spanning just a part of an arc, here's the more precise command:
+
+\verb|\kbogen{number}{start}{stop}{options}| draws on the arc segment \verb|number| (as above) but from stop \verb|start| to stop  \verb|stop|. The arc thus drawn can in fact be longer than just one fifth of the circle. 
 
 \subsection*{Stops}
 
-The stops on the lines are labelled as follows:
+The stops on the lines and arcs are labelled as follows:
 
-    \verb|0r1| is the first stop on the ring from node \verb|0|, counter-clockwise.
+\verb|0r1| is the first stop on the ring from node \verb|0|, counter-clockwise.
     
-    \verb|0+1| is the first stop on the long line from node \verb|0|, clockwise.
+\verb|0+1| is the first stop on the long line from node \verb|0|, clockwise.
     
-    \verb|0-1| is the first stop on the long line from node \verb|0|, counter-clockwise.
+\verb|0-1| is the first stop on the long line from node \verb|0|, counter-clockwise.
     
-    \verb|0a1| is the first stop on the short line from node \verb|0a|, counter-clockwise.
+\verb|0a1| is the first stop on the short line from node \verb|0a|, counter-clockwise.
+
+The radius of the stops is of length \verb|\svar|
 
 \subsection*{Blocks}
 
@@ -105,20 +132,42 @@ Since you sometimes just want to block a line without bothering too much about t
 \verb|\ccornl{number}| blocks long line left from node  \verb|number|.
 
 \verb|\ccornr{number}| blocks long line right from node  \verb|number|.
-|
 
 \verb|\cjunct{}| blocks short line \emph{opposite} node  \verb|number|.
 
+The radius of the blocks is of length \verb|\fvar|.
+
 \subsection*{Pieces}
 
-Individual pieces can be drawn for example by using the following node shapes:
+Individual (round) pieces can be drawn as coloured blocks using the commands from above. Alternatively, you can draw whatever you like at one of the nodes as labelled above. For convenience, we have pre-defined the following node shapes:
 
-\noindent\verb|triangle| draws a triangle; example: \verb|\node[triangle] at (2) {}; |
+\verb|triangle,color=red| draws a solid red triangle; example:
 
-\noindent\verb|square| draws a square. Both these nodes can, of course, be labelled and/or coloured.
+\verb|\node[triangle,red] at (2) {}; |
+
+\verb|square| draws a solid square. Both these nodes can, of course, be labelled and/or coloured.
+
+If you need to draw more than one piece onto a stop, your best bet is probably to wrap them into a \verb|pic| environment using
+
+\verb|\tikzset={mytwo/.pic={content}}| and then draw that with 
+
+\verb|\draw at (node) pic{mytwo}|.
+
+\subtitle{Extras}
+
+\verb|\highlight{node}| simply draws a circle of size \verb|3\svar| around a node.
 
 \section*{Agenda}
 \begin{itemize}
-    \item migrate to \verb|arrows.meta| and have arrow tips scale, too!
+    \item prepar macro for two pieces at corners.
+    \item migrate to \verb|arrows.meta| and have arrow tips scale too
 \end{itemize}
+
+\begin{figure}
+    \centering
+    \input{standalone}
+    \caption{Further examples}
+    \label{fig:furtherexamples}
+\end{figure}
+
 \end{document}

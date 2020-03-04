@@ -64,7 +64,7 @@
 }
 
 
-\ExecuteOptionsX{rotate=90,blackness=66,linecolor=black}\relax
+\ExecuteOptionsX{rotate=90,blackness=40,linecolor=black}\relax
 \ExecuteOptions{bunt}\relax
 \ProcessOptionsX\relax
 
@@ -93,8 +93,16 @@
     \draw[#2,>=\meinpfeil,line width=\pfeildicke,cap=round] ({72*(#1-1)+\rota}:\kvar)  arc ({72*(#1-1)+\rota}:{72*(#1)+\rota}:\kvar)
 }
 
+\newcommand{\kbogen}[4]{
+    \draw[#4,>=\meinpfeil,line width=\pfeildicke,cap=round] ({72*(#1-1)+\rota+(#2)*18}:\kvar)  arc ({72*(#1-1)+\rota+(#2)*18}:{18*(#1)+\rota+(#3+#2)*18}:\kvar) 
+}
+
 \newcommand{\block}[2]{
-    \filldraw[draw=black,fill=#2] (#1) circle (\fvar);
+    \filldraw[draw=black,fill=#2] (#1) circle (\fvar)
+}
+
+\newcommand{\highlight}[1]{
+    \draw (#1) circle (3\svar)
 }
 
 %%% PICS
