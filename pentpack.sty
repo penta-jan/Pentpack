@@ -10,16 +10,20 @@
 \usetikzlibrary{positioning}
 \usetikzlibrary{arrows}
 \usetikzlibrary{shapes.geometric}
+\usetikzlibrary{calc}
 
-\newcommand{\myred}{gray!10}
-\newcommand{\myblue}{gray!15}
-\newcommand{\mywhite}{gray!11}
-\newcommand{\myyellow}{gray!38}
-\newcommand{\mygreen}{gray!50}
+\newcommand{\myred}{WildStrawberry}
+\newcommand{\myblue}{Cerulean}
+\newcommand{\mywhite}{white}
+\newcommand{\myyellow}{Goldenrod}
+\newcommand{\mygreen}{SpringGreen}
 \newcommand{\blackness}{black!55}
 \newcommand{\linecolor}{black}
 \newcommand{\rota}{}
 \newlength{\ringwidth}
+
+\newboolean{details}
+\setboolean{details}{true}
 
 \newcommand{\nona}{}  % node name to be passed 
 
@@ -46,8 +50,24 @@
     \renewcommand{\linecolor}{#1}
 }
 
+\DeclareOptionX{simple}{
+    \setboolean{details}{false}
+%    \renewcommand{\myred}{white}
+%    \renewcommand{\myblue}{white}
+%    \renewcommand{\mywhite}{white}
+%    \renewcommand{\myyellow}{white}
+%    \renewcommand{\mygreen}{white}
+}
 
-\DeclareOption{sw}{
+\DeclareOptionX{white}{
+    \renewcommand{\myred}{white}
+    \renewcommand{\myblue}{white}
+    \renewcommand{\mywhite}{white}
+    \renewcommand{\myyellow}{white}
+    \renewcommand{\mygreen}{white}
+}
+
+\DeclareOptionX{sw}{
     \renewcommand{\myred}{gray!10}
     \renewcommand{\myblue}{gray!15}
     \renewcommand{\mywhite}{gray!11}
@@ -55,7 +75,7 @@
     \renewcommand{\mygreen}{gray!50}
 }
 
-\DeclareOption{bunt}{
+\DeclareOptionX{bunt}{
     \renewcommand{\myred}{WildStrawberry}
     \renewcommand{\myblue}{Cerulean}
     \renewcommand{\mywhite}{white}
@@ -65,8 +85,8 @@
 
 
 \ExecuteOptionsX{rotate=90,blackness=40,linecolor=black}\relax
-\ExecuteOptions{bunt}\relax
 \ProcessOptionsX\relax
+
 
 %%%%%%%%%% COMMANDS
 
@@ -102,7 +122,10 @@
 }
 
 \newcommand{\highlight}[1]{
-    \draw (#1) circle (3\svar)
+    \ifthenelse{\boolean{details}}{
+    \draw (#1) circle (3\svar);}{
+    }
+    \draw[line width=0.5\pfeildicke,<-,>=latex] (#1) -- ($(#1)!6*\svar!(0,0)$);
 }
 
 %%% PICS
@@ -114,14 +137,14 @@
 \tikzset{
     corn/.pic={    
     \filldraw[draw=black, fill, line width=0.3pt] (0,0) circle (\cvar);
-    \foreach \q in {1,...,6} {
-        \filldraw[small] ({-162+\rota}:{\cvar+\q*2*\svar-\svar}) circle (\svar);
-        \node (\s+\q) at ({-162+\rota}:{\cvar+\q*2*\svar-\svar}) {};        
-        }
-    \foreach \q in {1,...,6} {
-        \filldraw[small] ({-198+\rota}:{\cvar+\q*2*\svar-\svar}) circle (\svar);
-        \node (\s-\q) at ({-198+\rota}:{\cvar+\q*2*\svar-\svar}) {};
-        }
+        \foreach \q in {1,...,6} {
+            \ifthenelse{\boolean{details}}{\filldraw[small] ({-162+\rota}:{\cvar+\q*2*\svar-\svar}) circle (\svar);}{}
+            \node (\s+\q) at ({-162+\rota}:{\cvar+\q*2*\svar-\svar}) {};        
+            }
+        \foreach \q in {1,...,6} {
+            \ifthenelse{\boolean{details}}{\filldraw[small] ({-198+\rota}:{\cvar+\q*2*\svar-\svar}) circle (\svar);}{}
+            \node (\s-\q) at ({-198+\rota}:{\cvar+\q*2*\svar-\svar}) {};
+            }
     }
 }
 
@@ -135,10 +158,10 @@
 \tikzset{
     junc/.pic={    
     \filldraw[draw=black, fill, line width=0.3pt] (0,0) circle (\jvar);
-    \foreach \q in {1,...,3} {
-        \filldraw[small] ({-54+\rota}:{\jvar+\q*2*\svar-\svar}) circle (\svar);
-        \node (\s a\q) at ({-54+\rota}:{\jvar+\q*2*\svar-\svar}) {};
-        }
+        \foreach \q in {1,...,3} {
+            \ifthenelse{\boolean{details}}{\filldraw[small] ({-54+\rota}:{\jvar+\q*2*\svar-\svar}) circle (\svar);}{}
+            \node (\s a\q) at ({-54+\rota}:{\jvar+\q*2*\svar-\svar}) {};
+            }
     }
 }
 
@@ -174,41 +197,65 @@
     \filldraw[fill=black] ({#1*72+36+\rota}:\kvar) circle (\fvar);
 }
 
+%% Pieces in standard forms
+\newcommand{\tri}[2]{
+    \node[triangle,draw,fill=#2] at (#1) {}
+}
 
-%%% Drawing the stops
+\newcommand{\squ}[2]{
+    \node[square,draw,fill=#2] at (#1) {}
+}
+
+%% Two pieces at a node
+
+\newcommand{\two}[3]{
+    \node[triangle,draw,fill=#2,xshift=-\svar] at (#1) {};
+    \node[square,draw,fill=#3,xshift=\svar] at (#1) {};
+}
 
 
-\newcommand{\nodes}[1]{
-    \ifthenelse{#1=0}{\def\mycolor{\mywhite}}{}
-    \ifthenelse{#1=1}{\def\mycolor{\mygreen}}{}
-    \ifthenelse{#1=2}{\def\mycolor{\myyellow}}{}
-    \ifthenelse{#1=3}{\def\mycolor{\myred}}{}
-    \ifthenelse{#1=4}{\def\mycolor{\myblue}}{}
-    \ifthenelse{#1=5}{\def\mycolor{\mywhite}}{}
-    \renewcommand{\nona}{#1}
-    \node (#1) at ({\rota+72*#1}:\kvar){};   
-    \draw ({\rota+72*#1}:\kvar) pic[color=\mycolor,rotate={72*#1}] {corn}; 
-    \node (#1a) at ({\rota+72*#1}:{-\kvar/2.618}) {};
-    \draw ({\rota+72*#1}:{-\kvar/2.618}) pic[color=\mycolor,rotate={72*#1}] {junc};
-} 
 
 % Drawing the board
 
 \tikzset{
     myboard/.pic={
-        \fill[color=\blackness] (0,0) circle (\kvar+\cvar) ;
-        \draw[line width=\ringwidth,color=gray!15] (0,0) circle (\kvar) ;
-        \draw[line width=0.3pt,color=black] (0,0) circle (\kvar+0.5\ringwidth) ;
-        \draw[line width=0.3pt,color=black] (0,0) circle (\kvar-0.5\ringwidth) ;
+        \ifthenelse{\boolean{details}}{
+            \fill[color=\blackness] (0,0) circle (\kvar+\cvar) ;
+            \draw (0,0) circle (\kvar+\cvar);
+            \draw[line width=\ringwidth,color=gray!15] (0,0) circle (\kvar) ;
+            \draw[line width=0.3pt,color=black] (0,0) circle (\kvar+0.5\ringwidth) ;
+            \draw[line width=0.3pt,color=black] (0,0) circle (\kvar-0.5\ringwidth) ;
+        }{
+            \draw[dashed] (0,0) circle (\kvar);
+        }
         \foreach \s in {0,...,5} { 
             \foreach \t in {1,...,3} {
                 \node (\s r\t) at ({\t*18+\rota+\s*72}:\kvar) {};
-                \filldraw[small] ({\t*18+\rota+\s*72}:\kvar) circle (\svar);
+               \ifthenelse{\boolean{details}}{\filldraw[small] ({\t*18+\rota+\s*72}:\kvar) circle (\svar);}{}
             }
         }
-        \foreach \s in {0,...,5} {% draws 6/5 nodes where 0=5 white
-            \nodes{\s};
+        \foreach \s in {0,...,5} {% defines 6/5 nodes where 0=5 white
+            \node (\s) at ({\rota+72*\s}:\kvar){};   
+            \node (\s a) at ({\rota+72*\s}:{-\kvar/2.618}) {};
         }
+        \ifthenelse{\boolean{details}}{}{
+            \draw[dotted] (0) -- (2);
+            \draw[dotted] (1) -- (3);
+            \draw[dotted] (2) -- (4);
+            \draw[dotted] (3) -- (0);
+            \draw[dotted] (4) -- (1);
+        }
+        \foreach \s in {0,...,5} {% draws connecting stops
+            \ifthenelse{\s=0}{\def\mycolor{\mywhite}}{}
+            \ifthenelse{\s=1}{\def\mycolor{\mygreen}}{}
+            \ifthenelse{\s=2}{\def\mycolor{\myyellow}}{}
+            \ifthenelse{\s=3}{\def\mycolor{\myred}}{}
+            \ifthenelse{\s=4}{\def\mycolor{\myblue}}{}
+            \ifthenelse{\s=5}{\def\mycolor{\mywhite}}{}
+            \draw ({\rota+72*\s}:\kvar) pic[color=\mycolor,rotate={72*\s}] {corn}; 
+            \draw ({\rota+72*\s}:{-\kvar/2.618}) pic[color=\mycolor,rotate={72*\s}] {junc};
+        }
+        
     }
 }
 

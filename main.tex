@@ -7,7 +7,7 @@
 \setlength{\parskip}{1ex}
 \setlength{\parindent}{0pt}
 
-\title{Pentpack.sty}
+\title{pentpack.sty}
 \subtitle{A package to draw Pentagame board and moves}
 
 \author{Jan `Penta' Suchanek}
@@ -28,7 +28,9 @@
     \end{pentdiag}
 
 \end{center}
+
 \begin{figure}
+    \setboolean{details}{true}
     \centering
 
     \begin{pentdiag}{6cm}
@@ -49,18 +51,25 @@
         \block{3+2}{\myred};
         \block{2-3}{\myblue};
         \block{2a1}{\mygreen};
-        \block{2r2}{\myyellow};
+ %       \block{2r2}{\myyellow};
     \end{pentdiag}
 
     \caption{Not so easy}
     \label{fig:mydiag}
 \end{figure}
 
+\begin{pentdiag}
+\end{pentdiag}
+
 \subsection*{Loading the package}
 
 This is a package to draw Pentagame boards using TikZ. The design of the board can, to some extent, be manipulated upon loading the package; later, only the size of the individual board can be changed. 
 
-\verb|sw|  have a black-and-white board
+\verb|sw|  have grey shades instead of colours
+
+\verb|white|  make all nodes white 
+
+\verb|simple| omits individual stops on the lines and the circle and draws dotted and dashed lines instead. This happens by setting the boolean variable \verb|details| to false. You can use this switch (outside the pentdiag environment!) if you need an exception. If you do this within the \verb|figure| environment, the change remains local.
     
 \verb|rotate=0| rotates the board with \verb|rotate=90| set as default; \verb|rotate=0| sets white to the right.
     
@@ -72,7 +81,7 @@ Because it's TikZ, you can now draw all sort of things on it, ideally relative t
 
 \subsection*{Colours}
 
-Colours are named \verb|\mywhite|, \verb|\mygreen|, \verb|\myyellow|, \verb|\myred| and \verb|\myblue|. In colour mode, these are \verb|dvipsnames|: white, SpringGreen, Goldenrod, WildStrawberry and Cerulean. These commands are set as options to TikZ as in \verb|[color=\mywhite]|. You can define your own by redefining these commands:
+Colours are named \verb|\mywhite|, \verb|\mygreen|, \verb|\myyellow|, \verb|\myred| and \verb|\myblue|. In colour mode, these are loaded with \verb|[dvipsnames]{xcolor}|: white, SpringGreen, Goldenrod, WildStrawberry and Cerulean. These commands are set as options to TikZ as in \verb|[color=\mywhite]|. You can define your own by redefining these commands:
 
 \verb|\renewcommand{\mywhite}{color}|
 
@@ -139,23 +148,21 @@ The radius of the blocks is of length \verb|\fvar|.
 
 \subsection*{Pieces}
 
-Individual (round) pieces can be drawn as coloured blocks using the commands from above. Alternatively, you can draw whatever you like at one of the nodes as labelled above. For convenience, we have pre-defined the following node shapes:
+To draw a triangle, use
 
-\verb|triangle,color=red| draws a solid red triangle; example:
+\verb|\tri{node}{colourtri}| for triangles. The colour should be of type \verb|\myred| etc.
 
-\verb|\node[triangle,red] at (2) {}; |
+\verb|\squ{node}{coloursqu}| is the same for a square. 
 
-\verb|square| draws a solid square. Both these nodes can, of course, be labelled and/or coloured.
+To draw two pieces at a corner, use
 
-If you need to draw more than one piece onto a stop, your best bet is probably to wrap them into a \verb|pic| environment using
+\verb|\two{corner}{colortri}{colorsqu}| which draws a triangle and a square in the two colours.
 
-\verb|\tikzset={mytwo/.pic={content}}| and then draw that with 
 
-\verb|\draw at (node) pic{mytwo}|.
 
 \subtitle{Extras}
 
-\verb|\highlight{node}| simply draws a circle of size \verb|3\svar| around a node.
+\verb|\highlight{node}| draws a circle of size \verb|3\svar| around a node and an arrow of length \verb|5\svar| pointing at the node; in simple mode the circle is suppressed.
 
 \section*{Agenda}
 \begin{itemize}

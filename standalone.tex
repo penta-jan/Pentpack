@@ -1,9 +1,9 @@
 \documentclass{standalone}
 
-\usepackage[rotate=90,blackness=20]{pentpack}
+\usepackage[]{pentpack}
 
 \begin{document}
-    \begin{pentdiag}{5cm}%
+    \begin{pentdiag}{7cm}%
         \foreach \s in {0,...,4}
         {
          %   \block{\s}{};
@@ -16,9 +16,11 @@
         \block{1+4}{};
         \block{1a1}{};
         \kbogen{1}{2}{3}{->};
-        \highlight{1a1};
-        \node[triangle,fill=Cerulean] at (2) {};
-        \node[square,fill=WildStrawberry] at (0) {};
+        \highlight{2a1};
+        \highlight{3+2};
+        \highlight{2r1};
+        \tri{0}{white};
+        \two{4}{\myred}{\myblue};
     \end{pentdiag}
 
 \end{document}
