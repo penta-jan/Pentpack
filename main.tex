@@ -1,6 +1,6 @@
 \documentclass[a5paper]{scrartcl}
 
-\usepackage{pentpack}
+\usepackage[brettrad=0.2\linewidth]{pentpack}
 
 \usepackage{standalone}
 
@@ -17,49 +17,53 @@
 \maketitle
 \begin{center}
         
-    \begin{pentdiag}{0.4\linewidth}
+    \begin{pentdiag}
         \foreach \s in {0,...,4}
         {
-            \block{\s}{};
-            \linie{\s}{\s a}{->};
-            \linie{\s}{\fpeval{\s+1}}{-};
-            \cbog{\s};
+            \pblock{\s};
+            \plinie{\s}{\s a}{->};
+            \plinie{\s}{\fpeval{\s+1}}{-};
+            \pcbog{\s};
         }
     \end{pentdiag}
 
 \end{center}
 
+\boardwhite
+
 \begin{figure}
     \setboolean{details}{true}
     \centering
 
-    \begin{pentdiag}{6cm}
-        \block{0}{black};
-        \block{2}{\myred};
-        \block{3}{\myyellow};
-        \linie{1}{3a}{->};
-        \linie{2-3}{1a}{color=red} node[midway,above] {1};
-        \linie{2a}{1a}{color=red,<-};
-        \block{4r1}{Goldenrod};
-        \bogen{1}{};
-        \cjunct{0};
-        \cjunct{1};
-        \bogen{3}{<->};
-        \ccornr{2};
-        \ccornl{0};
-        \cbog{5};
-        \block{3+2}{\myred};
-        \block{2-3}{\myblue};
-        \block{2a1}{\mygreen};
- %       \block{2r2}{\myyellow};
+    \begin{pentdiag}[0.2\linewidth]
+        \pblock[\myred]{2};
+        \plinie{1}{3a}{->};
+        \plinie{2-3}{1a}{color=red} node[midway,above] {1};
+        \plinie{2a}{1a}{color=red,<-};
+        \pblock[\myyellow]{4r1};
+        \pbogen{1}{};
+        \pcjunct{0};
+        \pcjunct{1};
+        \pbogen{3}{<->};
+        \pccornr{2};
+        \pccornl{0};
+        \pcbog{5};
+        \addplayers[<-,thick]{2};
+        \draw[color=green] (p1) -- (p2);
     \end{pentdiag}
 
     \caption{Not so easy}
     \label{fig:mydiag}
 \end{figure}
 
-\begin{pentdiag}
-\end{pentdiag}
+\boardcoloured
+
+\begin{figure}[ht]
+    \centering
+    \input{initialposition.tex}
+    \caption{Initial position for two players}
+    \label{fig:initialposition}
+\end{figure}
 
 \subsection*{Loading the package}
 
@@ -90,7 +94,7 @@ Ideally this would be done in your preamble.
 
 \subsection*{Environment pentdiag}
 
-\verb|\begin{pentdiag}{circlediameter}| etc.~draws a Pentagame board in the size specified. Note that the parameter defines the circle, not the circumference, which is slightly larger; so setting it to \verb|\linewidth| will result in an overfull \verb|hbox|.
+\verb|\begin{pentdiag}{circlediameter}| etc.~draws a Pentagame board in the size specified which is \verb|\brettrad|. Note that the parameter defines the circle, not the circumference, which is slightly larger; so setting it to \verb|\linewidth| will result in an overfull \verb|hbox|.
 
 \subsection*{Nodes}
 
@@ -104,17 +108,17 @@ The radius of the corners is of length \verb|\cvar| and the radius of the juncti
 
 \subsection*{Lines}
 
-\verb|\linie{from}{to}{options}| draws a line between two nodes or coordinates (the centre of the board is \verb|0,0|). Options can be of type \verb|->| or \verb|color=red| etc. can be passed to TikZ to make these arrows, coloured, dashed etc. They can be complemented for labeling, e.g.
+\verb|\plinie{from}{to}{options}| draws a line between two nodes or coordinates (the centre of the board is \verb|0,0|). Options can be of type \verb|->| or \verb|color=red| etc. can be passed to TikZ to make these arrows, coloured, dashed etc. They can be complemented for labeling, e.g.
 
-\verb|\linie{1}{3a}{->} node[midway,right] {1};|
+\verb|\plinie{1}{3a}{->} node[midway,right] {1};|
 
 ---draws the number 1 next to the line.
 
-\verb|\bogen{number}{options}| draws one of the arcs, where arc number \verb|0| is left of node number \verb|0| etc.; again, options for colour and arrows can be passed. 
+\verb|\pbogen{number}{options}| draws one of the arcs, where arc number \verb|0| is left of node number \verb|0| etc.; again, options for colour and arrows can be passed. 
 
 If you need an arc spanning just a part of an arc, here's the more precise command:
 
-\verb|\kbogen{number}{start}{stop}{options}| draws on the arc segment \verb|number| (as above) but from stop \verb|start| to stop  \verb|stop|. The arc thus drawn can in fact be longer than just one fifth of the circle. 
+\verb|\pkbogen{number}{start}{stop}{options}| draws on the arc segment \verb|number| (as above) but from stop \verb|start| to stop  \verb|stop|. The arc thus drawn can in fact be longer than just one fifth of the circle. 
 
 \subsection*{Stops}
 
@@ -132,17 +136,17 @@ The radius of the stops is of length \verb|\svar|
 
 \subsection*{Blocks}
 
-\verb|\block{node}{color}| places a filled circle of size \verb|\svar| onto the stop or node specified. Default colour is \verb|black|.
+\verb|\pblock[colour]{node}| places a filled circle of size \verb|\svar| onto the stop or node specified. Default colour is \verb|black|.
 
 Since you sometimes just want to block a line without bothering too much about the exact placement of the block, there are four `shortcut' commands:
 
-\verb|\cbog{number}| blocks arc \verb|number|.
+\verb|\pcbog{number}| blocks arc \verb|number|.
 
-\verb|\ccornl{number}| blocks long line left from node  \verb|number|.
+\verb|\pccornl{number}| blocks long line left from node  \verb|number|.
 
-\verb|\ccornr{number}| blocks long line right from node  \verb|number|.
+\verb|\pccornr{number}| blocks long line right from node  \verb|number|.
 
-\verb|\cjunct{}| blocks short line \emph{opposite} node  \verb|number|.
+\verb|\pcjunct{}| blocks short line \emph{opposite} node  \verb|number|.
 
 The radius of the blocks is of length \verb|\fvar|.
 
@@ -150,24 +154,33 @@ The radius of the blocks is of length \verb|\fvar|.
 
 To draw a triangle, use
 
-\verb|\tri{node}{colourtri}| for triangles. The colour should be of type \verb|\myred| etc.
+\verb|\ptri{node}{colourtri}| for triangles. The colour should be of type \verb|\myred| etc.
 
-\verb|\squ{node}{coloursqu}| is the same for a square. 
+\verb|\psqu{node}{coloursqu}| is the same for a square. 
 
 To draw two pieces at a corner, use
 
-\verb|\two{corner}{colortri}{colorsqu}| which draws a triangle and a square in the two colours.
+\verb|\ptwo{corner}{colortri}{colorsqu}| which draws a triangle and a square in the two colours.
 
 
 
-\subtitle{Extras}
+\section*{Highlighting}
 
-\verb|\highlight{node}| draws a circle of size \verb|3\svar| around a node and an arrow of length \verb|5\svar| pointing at the node; in simple mode the circle is suppressed.
+\verb|\phighlight{node}| draws a circle of size \verb|3\svar| around a node and an arrow of length \verb|5\svar| pointing at the node; in simple mode the circle is suppressed. It seems that the arrows depending on the \verb|calc| package do not always work. But remember that you can virtually draw anything once you address the right node.
+
+\section*{Players}
+
+\verb|\addplayers[lineoptions]{number}| adds players written in \verb|\mathcal{A}| format in a counter-clockwise manner; this can be a number between two and five. Set \verb|lineoptions| for arrows between the players, e.g.~\verb|\addplayers[<-,ultra thick]{3}| for counter-clockwise arrows.
+
+
 
 \section*{Agenda}
 \begin{itemize}
-    \item prepar macro for two pieces at corners.
-    \item migrate to \verb|arrows.meta| and have arrow tips scale too
+    \item It would be better if the syntax of the pieces would include the colours in an optional, rather than a second mandatory parameter. This is something for later because it would break compatibility.
+    \item Label all nodes in a redundant double manner as introduced in the book.
+    \item I don't like the syntax for the nodes on the pentagon, it's too confusing. Sometimes things are labelled clockwise, sometimes counter-clockwise, which is no good. 
+    \item Sometimes stuff starts at 0 and sometimes at 1, which is not consistent enough.
+    \item Migrate to \verb|arrows.meta| and have arrow tips scale too.
 \end{itemize}
 
 \begin{figure}

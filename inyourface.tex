@@ -1,0 +1,28 @@
+\documentclass{standalone}
+\usepackage{pentpack}
+\begin{document}
+	\begin{pentdiag}
+		\ptri{2a}{\mywhite};		
+		\ptri{0a}{\myyellow};		
+		\ptwo{1}{\mygreen}{\myblue};		
+		\psqu{2}{\myyellow};		
+		\ptwo{0}{\myblue}{\mygreen};		
+		\ptri{3+3}{\myred};
+		\psqu{3a}{\mywhite};
+		\psqu{1a2}{\myred};
+		\pblock{0+2};
+		\pblock{4a};
+		\plinie{2a}{4}{<-};
+		\plinie{1a}{3}{} ;
+		\plinie{0a}{1a}{<-};
+		\pbogen{4}{};
+		\pblock{4+3};
+		\pblock{1-3};
+		\pblock{3+4};
+		\pblock[gray]{c0};
+		\pblock[gray]{c1};
+		\pblock[gray]{c2};
+		\pblock[gray]{c3};
+		\pblock[gray]{c4};				
+	\end{pentdiag} 
+\end{document}
