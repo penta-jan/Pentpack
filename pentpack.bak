@@ -2,7 +2,6 @@
 \ProvidesPackage{pentpack}[2020/03/14 Package to draw Pentagame diagrams]
 
 \RequirePackage[dvipsnames]{xcolor}
-\RequirePackage{xcolor}
 \RequirePackage{xkeyval}
 \RequirePackage{environ}
 \RequirePackage{tikz}
@@ -13,64 +12,19 @@
 \usetikzlibrary{shapes.geometric}
 \usetikzlibrary{calc}
 
-% old color schema
-% \colorlet{my_red}{WildStrawberry}
-% \colorlet{my_yellow}{Goldenrod}
-% \colorlet{my_blue}{Cerulean}
-% \colorlet{my_green}{SpringGreen}
-% \colorlet{my_white}{white}
-
-% \colorlet{my_blackness}{black!55}
-% \colorlet{my_stopshade}{gray!15}
-% \colorlet{my_linecolor}{black}
-
-% original color schema
-% \definecolor{my_red}{HTML}{ed1c24}
-% \definecolor{my_yellow}{HTML}{fff200}
-% \definecolor{my_blue}{HTML}{00adef}
-% \definecolor{my_green}{HTML}{40b93c}
-% \definecolor{my_white}{HTML}{f9f9f9}
-
-% \definecolor{my_blackness}{gray}{0}
-% \definecolor{my_stopshade}{gray}{0.6}
-% \definecolor{my_linecolor}{gray}{1}
-
-% m.z. color schema
-\definecolor{my_red}{HTML}{ff1c24}
-\definecolor{my_yellow}{HTML}{f8f200}
-\definecolor{my_blue}{HTML}{00adff}
-\definecolor{my_green}{HTML}{40e03c}
-\definecolor{my_white}{HTML}{ffffff}
-
-\definecolor{my_blackness}{gray}{0}
-\definecolor{my_stopshade}{gray}{0.6}
-\definecolor{my_stopaccent}{gray}{0.3}
-\definecolor{my_linecolor}{gray}{1}
-
-% color commands
-\newcommand{\myred}{my_red}
-\newcommand{\myblue}{my_blue}
-\newcommand{\mywhite}{my_white}
-\newcommand{\myyellow}{my_yellow}
-\newcommand{\mygreen}{my_green}
-
-\newcommand{\blackness}{my_blackness} % no effect ???
-\newcommand{\stopshade}{my_stopshade}
-\newcommand{\stopaccent}{my_stopaccent}
-\newcommand{\cornershade}{my_cornershade}
-\newcommand{\linecolor}{my_linecolor}  % no effect ???
-
+\newcommand{\myred}{WildStrawberry}
+\newcommand{\myblue}{Cerulean}
+\newcommand{\mywhite}{white}
+\newcommand{\myyellow}{Goldenrod}
+\newcommand{\mygreen}{SpringGreen}
+\newcommand{\blackness}{black!55}
+\newcommand{\stopshade}{gray!15}
+\newcommand{\linecolor}{black}
 \newcommand{\rota}{}
 \newlength{\ringwidth}
 
 \newboolean{details}
 \setboolean{details}{true}
-
-\newboolean{noring}
-\setboolean{noring}{false}
-
-\newboolean{solid}
-\setboolean{solid}{false}
 
 \newcommand{\nona}{}  % node name to be passed 
 
@@ -108,24 +62,12 @@
     \setboolean{details}{false}
 }
 
-\DeclareOptionX{noring}{
-    \setboolean{noring}{true}
-}
-
-\DeclareOptionX{solid}{
-    \setboolean{solid}{true}
-}
-
 \DeclareOptionX{white}{
     \renewcommand{\myred}{white}
     \renewcommand{\myblue}{white}
     \renewcommand{\mywhite}{white}
     \renewcommand{\myyellow}{white}
     \renewcommand{\mygreen}{white}
-}
-
-\DeclareOptionX{nogray}{
-    \renewcommand{\stopshade}{white}
 }
 
 \DeclareOptionX{sw}{
@@ -177,7 +119,7 @@
 }
 
 \newcommand{\boardcoloured}{
-    \renewcommand{\stopshade}{gray!15}
+    \renewcommand{\stopshade}{gray!0}
     \renewcommand{\blackness}{black!55}
     \renewcommand{\myred}{WildStrawberry}
     \renewcommand{\myblue}{Cerulean}
@@ -230,13 +172,13 @@
 %%% PICS
 
 \tikzset{
-    small/.style={line width=0.3pt,draw=\stopaccent,fill=\stopshade}
+    small/.style={line width=0.3pt,draw=black,fill=\stopshade}
 }
 
 \tikzset{
     corn/.pic={    
-    \filldraw[draw=\stopaccent, fill, line width=0.3pt] (0,0) circle (\cvar);
-    \filldraw[draw=\stopaccent, fill=\stopshade, line width=0.3pt] (0,0) circle (0.8\cvar);
+    \filldraw[draw=black, fill, line width=0.3pt] (0,0) circle (\cvar);
+    \filldraw[draw=black, fill=white, line width=0.3pt] (0,0) circle (0.8\cvar);
         \foreach \q in {1,...,6} {
             \ifthenelse{\boolean{details}}{\filldraw[small] ({-162+\rota}:{\cvar+\q*2*\svar-\svar}) circle (\svar);}{}
             \node (\s+\q) at ({-162+\rota}:{\cvar+\q*2*\svar-\svar}) {};        
@@ -257,7 +199,7 @@
 
 \tikzset{
     junc/.pic={    
-    \filldraw[draw=\stopaccent, fill, line width=0.3pt] (0,0) circle (\jvar);
+    \filldraw[draw=black, fill, line width=0.3pt] (0,0) circle (\jvar);
         \foreach \q in {1,...,3} {
             \ifthenelse{\boolean{details}}{\filldraw[small] ({-54+\rota}:{\jvar+\q*2*\svar-\svar}) circle (\svar);}{}
             \node (\s a\q) at ({-54+\rota}:{\jvar+\q*2*\svar-\svar}) {};
@@ -339,19 +281,12 @@
     mypboard/.pic={
         \ifthenelse{\boolean{details}}{
             \fill[color=\blackness] (0,0) circle (\kvar+\cvar) ;
-            \ifthenelse{\boolean{noring}}{
-                }{
-                    \draw (0,0) circle (\kvar+\cvar); % surrounding circle
-                };
+            \draw (0,0) circle (\kvar+\cvar);
             \draw[line width=\ringwidth,color=gray!15] (0,0) circle (\kvar) ;
             \draw[line width=0.3pt,color=black] (0,0) circle (\kvar+0.5\ringwidth) ;
             \draw[line width=0.3pt,color=black] (0,0) circle (\kvar-0.5\ringwidth) ;
         }{
-            \ifthenelse{\boolean{solid}}{
-                \draw (0,0) circle (\kvar);
-                }{
-                    \draw[dashed] (0,0) circle (\kvar);
-                }
+            \draw[dashed] (0,0) circle (\kvar);
         }
         \foreach \s in {0,...,5} { 
             \foreach \t in {1,...,3} {
@@ -364,19 +299,11 @@
             \node (\s a) at ({\rota+72*\s}:{-\kvar/2.618}) {};
         }
         \ifthenelse{\boolean{details}}{}{
-            \ifthenelse{\boolean{solid}}{
-                \draw (0) -- (2);
-                \draw (1) -- (3);
-                \draw (2) -- (4);
-                \draw (3) -- (0);
-                \draw (4) -- (1);
-            }{
-                \draw[dotted] (0) -- (2);
-                \draw[dotted] (1) -- (3);
-                \draw[dotted] (2) -- (4);
-                \draw[dotted] (3) -- (0);
-                \draw[dotted] (4) -- (1);
-            }
+            \draw[dotted] (0) -- (2);
+            \draw[dotted] (1) -- (3);
+            \draw[dotted] (2) -- (4);
+            \draw[dotted] (3) -- (0);
+            \draw[dotted] (4) -- (1);
         }
         \foreach \s in {0,...,5} {% draws connecting stops
             \ifthenelse{\s=0}{\def\mycolor{\mywhite}}{}

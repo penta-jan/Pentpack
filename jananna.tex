@@ -1,0 +1,27 @@
+\documentclass[]{standalone}
+\usepackage[rotate=0]{pentpack}
+\begin{document}
+    \begin{pentdiag}
+        % triangle is rabbit
+        \ptri{0a3}{\mywhite};
+        \ptri{c2}{\mygreen};
+        \ptri{4+4}{\myyellow};
+        \ptri{3}{\myred};
+        \ptri{3a3}{\myblue};
+        \psqu{2}{\mywhite};
+        \psqu{0a2}{\mygreen};
+        \psqu{c1}{\myyellow};
+        \psqu{c4}{\myred};
+        \psqu{4}{\myblue};
+        \pblock{1-3};
+        \pblock{2+2};
+        \pblock{2-1};
+        \pblock{3-2};
+        \pblock{4-2};
+        \pblock[gray]{c0};
+        \pblock[gray]{c3};
+        \phighlight{2};
+        %\pblock[gray]{};
+        %\pblock[gray]{};
+    \end{pentdiag}
+\end{document}

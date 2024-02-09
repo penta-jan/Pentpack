@@ -73,6 +73,8 @@ This is a package to draw Pentagame boards using TikZ. The design of the board c
 
 \verb|white|  make all nodes white 
 
+\verb|noring|  omits the ring / border of the board
+
 \verb|simple| omits individual stops on the lines and the circle and draws dotted and dashed lines instead. This happens by setting the boolean variable \verb|details| to false. You can use this switch (outside the pentdiag environment!) if you need an exception. If you do this within the \verb|figure| environment, the change remains local.
     
 \verb|rotate=0| rotates the board with \verb|rotate=90| set as default; \verb|rotate=0| sets white to the right.
@@ -172,7 +174,34 @@ To draw two pieces at a corner, use
 
 \verb|\addplayers[lineoptions]{number}| adds players written in \verb|\mathcal{A}| format in a counter-clockwise manner; this can be a number between two and five. Set \verb|lineoptions| for arrows between the players, e.g.~\verb|\addplayers[<-,ultra thick]{3}| for counter-clockwise arrows.
 
+\section*{A blue print}
 
+Use this to draw a complete two-player position:
+\begin{verbatim}
+    \begin{pentdiag}
+        %\two{}{}{\mywhite}{\mywhite}
+        \ptri{}{\mywhite};
+        \ptri{}{\mygreen};
+        \ptri{}{\myyellow};
+        \ptri{}{\myred};
+        \ptri{}{\myblue};
+        \psqu{}{\mywhite};
+        \psqu{}{\mygreen};
+        \psqu{}{\myyellow};
+        \psqu{}{\myred};
+        \psqu{}{\myblue};
+        \pblock{};
+        \pblock{};
+        \pblock{};
+        \pblock{};
+        \pblock{};
+        \pblock[gray]{};
+        \pblock[gray]{};
+        \pblock[gray]{};
+        \pblock[gray]{};
+        \pblock[gray]{};
+    \end{pentdiag}
+\end{verbatim}
 
 \section*{Agenda}
 \begin{itemize}

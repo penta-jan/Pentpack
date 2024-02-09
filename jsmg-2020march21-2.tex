@@ -1,0 +1,32 @@
+\documentclass{standalone}
+\usepackage{pentpack}
+\begin{document}
+\centering
+    \begin{pentdiag}
+        \pdata{Jan Suchanek, Manja Gärtner}{21.~März 2020}{Berlin}{Triangle}
+        %\two{}{}{\mywhite}{\mywhite}
+        \ptri{4}{\mywhite};
+        \ptri{1a2}{\mygreen};
+        \ptri{3a}{\myyellow};
+        \ptri{3}{\myred};
+        %\ptri{2}{\myblue};
+        \psqu{1}{\mywhite};
+        \psqu{0a2}{\mygreen};
+        \ptwo{2}{\myblue}{\myyellow};
+        %\psqu{2}{\myyellow};
+        \psqu{1a}{\myred};
+        \psqu{c1}{\myblue};
+        \pblock{0-6};
+        \pblock{3a3};
+        \pblock{3+2};
+        \pblock{0a3};
+        \pblock{3r2};
+        \pblock[gray]{2a3};
+        \pblock[gray]{c2};
+        \pblock[gray]{c3};
+        %\phighlight{0a2};
+        \pblock[gray]{c4};
+        \pblock[gray]{c5};
+        \pshowdata;
+    \end{pentdiag}
+\end{document}

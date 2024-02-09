@@ -66,12 +66,6 @@
 \newboolean{details}
 \setboolean{details}{true}
 
-\newboolean{noring}
-\setboolean{noring}{false}
-
-\newboolean{solid}
-\setboolean{solid}{false}
-
 \newcommand{\nona}{}  % node name to be passed 
 
 \newlength{\nodr}
@@ -108,24 +102,12 @@
     \setboolean{details}{false}
 }
 
-\DeclareOptionX{noring}{
-    \setboolean{noring}{true}
-}
-
-\DeclareOptionX{solid}{
-    \setboolean{solid}{true}
-}
-
 \DeclareOptionX{white}{
     \renewcommand{\myred}{white}
     \renewcommand{\myblue}{white}
     \renewcommand{\mywhite}{white}
     \renewcommand{\myyellow}{white}
     \renewcommand{\mygreen}{white}
-}
-
-\DeclareOptionX{nogray}{
-    \renewcommand{\stopshade}{white}
 }
 
 \DeclareOptionX{sw}{
@@ -236,7 +218,7 @@
 \tikzset{
     corn/.pic={    
     \filldraw[draw=\stopaccent, fill, line width=0.3pt] (0,0) circle (\cvar);
-    \filldraw[draw=\stopaccent, fill=\stopshade, line width=0.3pt] (0,0) circle (0.8\cvar);
+    \filldraw[draw=\stopaccent, fill=white, line width=0.3pt] (0,0) circle (0.8\cvar);
         \foreach \q in {1,...,6} {
             \ifthenelse{\boolean{details}}{\filldraw[small] ({-162+\rota}:{\cvar+\q*2*\svar-\svar}) circle (\svar);}{}
             \node (\s+\q) at ({-162+\rota}:{\cvar+\q*2*\svar-\svar}) {};        
@@ -338,20 +320,13 @@
 \tikzset{
     mypboard/.pic={
         \ifthenelse{\boolean{details}}{
-            \fill[color=\blackness] (0,0) circle (\kvar+\cvar) ;
-            \ifthenelse{\boolean{noring}}{
-                }{
-                    \draw (0,0) circle (\kvar+\cvar); % surrounding circle
-                };
+            \fill[color=blackness] (0,0) circle (\kvar+\cvar) ;
+            \draw (0,0) circle (\kvar+\cvar);
             \draw[line width=\ringwidth,color=gray!15] (0,0) circle (\kvar) ;
             \draw[line width=0.3pt,color=black] (0,0) circle (\kvar+0.5\ringwidth) ;
             \draw[line width=0.3pt,color=black] (0,0) circle (\kvar-0.5\ringwidth) ;
         }{
-            \ifthenelse{\boolean{solid}}{
-                \draw (0,0) circle (\kvar);
-                }{
-                    \draw[dashed] (0,0) circle (\kvar);
-                }
+            \draw[] (0,0) circle (\kvar);
         }
         \foreach \s in {0,...,5} { 
             \foreach \t in {1,...,3} {
@@ -364,19 +339,11 @@
             \node (\s a) at ({\rota+72*\s}:{-\kvar/2.618}) {};
         }
         \ifthenelse{\boolean{details}}{}{
-            \ifthenelse{\boolean{solid}}{
-                \draw (0) -- (2);
-                \draw (1) -- (3);
-                \draw (2) -- (4);
-                \draw (3) -- (0);
-                \draw (4) -- (1);
-            }{
-                \draw[dotted] (0) -- (2);
-                \draw[dotted] (1) -- (3);
-                \draw[dotted] (2) -- (4);
-                \draw[dotted] (3) -- (0);
-                \draw[dotted] (4) -- (1);
-            }
+            \draw[] (0) -- (2);
+            \draw[] (1) -- (3);
+            \draw[] (2) -- (4);
+            \draw[] (3) -- (0);
+            \draw[] (4) -- (1);
         }
         \foreach \s in {0,...,5} {% draws connecting stops
             \ifthenelse{\s=0}{\def\mycolor{\mywhite}}{}
